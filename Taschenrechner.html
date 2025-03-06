@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taschenrechner</title>
+    <style>
+        body {
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        #calculator {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 80%;
+            max-width: 400px;
+        }
+
+        #display {
+            width: 100%;
+            font-size: 24px;
+            text-align: right;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        #buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            font-size: 18px;
+            padding: 10px;
+            border: none;
+            background-color: #f0f0f0;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div id="calculator">
+        <input type="text" id="display" readonly>
+        <div id="buttons">
+            <button>7</button><button>8</button><button>9</button><button>/</button>
+            <button>4</button><button>5</button><button>6</button><button>*</button>
+            <button>1</button><button>2</button><button>3</button><button>-</button>
+            <button>0</button><button>.</button><button>+</button><button>C</button><button>=</button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const display = document.getElementById('display');
+            const buttons = document.querySelectorAll('#buttons button');
+
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const value = this.textContent;
+                    if (value === 'C') {
+                        display.value = '';
+                    } else if (value === '=') {
+                        try {
+                            display.value = eval(display.value);
+                        } catch {
+                            display.value = 'Fehler';
+                        }
+                    } else {
+                        display.value += value;
+                    }
+                });
+            });
+
+            document.addEventListener('keypress', function(event) {
+                const key = event.key;
+                if (/[0-9.+\-*/]/.test(key)) {
+                    display.value += key;
+                } else if (key === 'Enter') {
+                    try {
+                        display.value = eval(display.value);
+                    } catch {
+                        display.value = 'Fehler';
+                    }
+                } else if (key === 'c' || key === 'C') {
+                    display.value = '';
+                }
+            });
+
+            // Set background image from URL
+            const backgroundUrl = 'https://www.landkreis-verden.de/medien/bilder/verden_blick_auf_dom_frank_pusch.jpg?20220421113319'; // Ersetzen Sie dies mit Ihrer URL
+            document.body.style.backgroundImage = `url('${backgroundUrl}')`;
+        });
+    </script>
+</body>
+</html>

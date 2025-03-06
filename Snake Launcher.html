@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Launcher</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 150px;
+            background-image: url('https://cdn.pixabay.com/photo/2015/02/28/15/25/snakes-653639_960_720.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        select, button {
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .header {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 5px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">Hier ist Jump ein PC Browser Game in HTML</div>
+    <h1>Wähle eine Seite zum Öffnen</h1>
+    <select id="pageSelector">
+        <option value="Alpha 0.1.html">Alpha 0.1</option>
+	<option value="Alpha 0.2.html">Alpha 0.2</option>
+    </select>
+    <br>
+    <button onclick="openPage()">Öffnen</button>
+    
+    <script>
+        function openPage() {
+            var selectedPage = document.getElementById("pageSelector").value;
+            window.location.href = selectedPage;
+        }
+    </script>
+</body>
+</html>

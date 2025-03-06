@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chrome Dino Spiel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f7f7f7;
+            margin: 0;
+        }
+        #game {
+            border: 1px solid #000;
+            width: 600px;
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+        .dino {
+            width: 40px;
+            height: 40px;
+            background-color: #000;
+            position: absolute;
+            bottom: 0;
+        }
+        .cactus {
+            width: 20px;
+            height: 40px;
+            background-color: #000;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+        }
+        #score {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        #game-over {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 32px;
+            font-weight: bold;
+            color: red;
+        }
+        #keyboard-only {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 18px;
+            font-weight: bold;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div id="game">
+        <div id="score">0</div>
+        <div class="dino" id="dino"></div>
+        <div id="game-over">Game Over</div>
+        <div id="keyboard-only">Nur mit Tastatur spielbar, es befindet sich momentan in der Alpha 0.2</div>
+    </div>
+
+    <script>
+        document.addEventListener('keydown', function(event) {
+            if (event.code === 'Space') {
+                jump();
+            }
+        });
+
+        let dino = document.getElementById('dino');
+        let game = document.getElementById('game');
+        let scoreElement = document.getElementById('score');
+        let gameOverElement = document.getElementById('game-over');
+        let isJumping = false;
+        let score = 0;
+        let gameOver = false;
+
+        function jump() {
+            if (isJumping) return;
+            isJumping = true;
+            let upInterval = setInterval(() => {
+                if (dino.offsetTop <= 50) {
+                    clearInterval(upInterval);
+                    let downInterval = setInterval(() => {
+                        if (dino.offsetTop >= 150) {
+                            clearInterval(downInterval);
+                            isJumping = false;
+                        } else {
+                            dino.style.top = dino.offsetTop + 5 + 'px';
+                        }
+                    }, 20);
+                } else {
+                    dino.style.top = dino.offsetTop - 5 + 'px';
+                }
+            }, 20);
+        }
+
+        function createCactus() {
+            if (gameOver) return;
+            let cactus = document.createElement('div');
+            cactus.classList.add('cactus');
+            game.appendChild(cactus);
+
+            let moveInterval = setInterval(() => {
+                if (cactus.offsetLeft <= 0) {
+                    clearInterval(moveInterval);
+                    game.removeChild(cactus);
+                    score++;
+                    scoreElement.textContent = score;
+                } else if (cactus.offsetLeft < dino.offsetLeft + dino.clientWidth && cactus.offsetLeft > dino.offsetLeft && dino.offsetTop >= 150) {
+                    clearInterval(moveInterval);
+                    gameOver = true;
+                    gameOverElement.style.display = 'block';
+                } else {
+                    cactus.style.left = cactus.offsetLeft - 5 + 'px';
+                }
+            }, 20);
+
+            setTimeout(createCactus, Math.random() * 2000 + 1000);
+        }
+
+        createCactus();
+    </script>
+</body>
+</html>

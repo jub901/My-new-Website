@@ -1,0 +1,150 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" media="screen" href="./Beispiel:SELFHTML-Beispiel-Grundlayout.css" />
+		<title>Tic-Tac-Toe</title>
+		<style type="text/css">
+			.tic-tac-toe table {
+				border: 2px solid black;
+				border-collapse: collapse;
+			}
+
+			.tic-tac-toe td {
+				border: 1px solid black;
+				height: 5em;
+				position: relative;
+				text-align: center;
+				width: 5em;
+			}
+
+			.tic-tac-toe table:not(.game-over) td {
+				cursor: pointer;
+			}
+
+			.tic-tac-toe td button {
+				position: absolute;
+				left: -100vw;
+			}
+
+			.tic-tac-toe .o {
+				background: #8f8;
+				color: #8f8;
+			}
+
+			.tic-tac-toe .x {
+				background: #f88;
+				color: #f88;
+			}
+
+			.tic-tac-toe .o,
+			.tic-tac-toe .x {
+				z-index: -1;
+			}
+
+			.tic-tac-toe .o::after,
+			.tic-tac-toe .x::after {
+				color: black;
+				display: block;
+				font-size: 5em;
+				position: absolute;
+				width: 100%;
+			}
+
+			.tic-tac-toe .o::after {
+				content: "○";
+				top: -0.2em;
+			}
+
+			.tic-tac-toe .x::after {
+				content: "×";
+				top: -0.125em;
+			}
+
+			.tic-tac-toe .o.highlighted::after,
+			.tic-tac-toe .x.highlighted::after {
+				color: white;
+			}
+
+			.tic-tac-toe .game-over {
+				border-color: red;
+			}
+		</style>
+		<script type="text/javascript">//<![CDATA[
+document.addEventListener("DOMContentLoaded", function () {
+	var games, i;
+
+	function TicTacToe (element) {
+		var current = 0,
+			players = [ "x", "o" ]
+			field = element.getElementsByTagName("table")[0],
+			caption = element.getElementsByTagName("caption")[0];
+
+		// click / tap verarbeiten
+		function mark (event) {
+			// Tabellenzelle bestimmen
+			var td = event.target;
+
+			// Button oder Zelle?
+			while (td.tagName.toLowerCase() != "td"
+				&& td != field
+			) {
+				td = td.parentNode;
+			}
+
+			// Zelle bei Bedarf markieren
+			if (td.tagName.toLowerCase() == "td"
+				&& td.className.length < 1
+			) {
+
+				td.className = players[current]; // Klassennamen vergeben
+				td.innerHTML = players[current];
+
+				current = 1 - current; // zwischen 0 und 1 hin- und herschalten
+
+				// Hinweis aktualisieren
+				caption.innerHTML = "Spieler " + players[current] + " ist am Zug.";
+			}
+		}
+
+		// Ereignis bei Tabelle überwachen
+		field.addEventListener("click", mark);
+	}
+
+	// finde alle Spielfeld-Tabellen
+	games = document.querySelectorAll(".tic-tac-toe");
+
+	for (i = 0; i < games.length; i++) {
+		TicTacToe(games[i]); // aktuelles Fundstück steht in games[i]
+	}
+});
+		//]]></script>
+	</head>
+	<body>
+		<h1>Tic-Tac-Toe</h1>
+		<aside class="tic-tac-toe">
+			<p>Zum Spielen bitte abwechselnd in die Spielfelder klicken!</p>
+			<table>
+				<caption>Spieler x ist am Zug.</caption>
+				<tbody>
+					<tr>
+						<td class="x">x</td>
+						<td><button>wählen</button></td>
+						<td><button>wählen</button></td>
+					</tr>
+					<tr>
+						<td><button>wählen</button></td>
+						<td class="o">o</td>
+						<td><button>wählen</button></td>
+					</tr>
+					<tr>
+						<td><button>wählen</button></td>
+						<td><button>wählen</button></td>
+						<td><button>wählen</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</aside>
+	</body>
+</html>
